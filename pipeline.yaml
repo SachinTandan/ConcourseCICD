@@ -8,7 +8,7 @@ resources:
 jobs:
   - name: build
     plan:
-      - get: my-git-repo
+      - get: ConcourseCICD
         trigger: true
       - task: build-task
         config:
