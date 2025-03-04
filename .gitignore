@@ -1,2 +1,35 @@
-.idea
-ConcourseDemo.iml
+# Maven / Gradle build directories
+/target/
+/build/
+
+# IntelliJ IDEA
+.idea/
+/*.iml
+
+# Eclipse
+/.project
+/.classpath
+/.settings/
+
+# NetBeans
+/nbproject/
+
+# VS Code
+/.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Java bytecode and compiled files
+*.class
+
+# Java packaging files
+*.jar
+*.war
+*.ear
+
+# IDE-spec
