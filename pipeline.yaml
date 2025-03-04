@@ -1,8 +1,8 @@
 resources:
-  - name: my-git-repo
+  - name: ConcourseCICD
     type: git
     source:
-      uri: https://github.com/user/repo.git
+      uri: https://github.com/SachinTandan/ConcourseCICD
       branch: main
 
 jobs:
@@ -24,5 +24,5 @@ jobs:
             args:
               - -exc
               - |
-                cd my-git-repo
+                cd ConcourseCICD
                 echo "Building project..."
