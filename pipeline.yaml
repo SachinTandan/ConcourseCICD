@@ -1,0 +1,28 @@
+resources:
+  - name: my-git-repo
+    type: git
+    source:
+      uri: https://github.com/user/repo.git
+      branch: main
+
+jobs:
+  - name: build
+    plan:
+      - get: my-git-repo
+        trigger: true
+      - task: build-task
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: ubuntu
+          inputs:
+            - name: my-git-repo
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                cd my-git-repo
+                echo "Building project..."

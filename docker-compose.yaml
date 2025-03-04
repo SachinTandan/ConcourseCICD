@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: concourse-db
+    restart: always
+    platform: linux/arm64
+    environment:
+      POSTGRES_USER: concourse
+      POSTGRES_PASSWORD: concourse
+      POSTGRES_DB: concourse
+    ports:
+      - "5432:5432"
+
+  concourse-web:
+    image: concourse/concourse:arm64  # ARM64 image
+    container_name: concourse-web
+    restart: always
+    platform: linux/arm64
+    command: web
+    depends_on:
+      - postgres
+    environment:
+      CONCOURSE_POSTGRES_HOST: postgres
+      CONCOURSE_POSTGRES_USER: concourse
+      CONCOURSE_POSTGRES_PASSWORD: concourse
+      CONCOURSE_POSTGRES_DATABASE: concourse
+      CONCOURSE_EXTERNAL_URL: http://localhost:8080
+      CONCOURSE_ADD_LOCAL_USER: admin:admin
+      CONCOURSE_MAIN_TEAM_LOCAL_USER: admin
+      CONCOURSE_TSA_HOST_KEY: /concourse/tsa_host_key.pem  # Pointing to the TSA host key location
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./tsa_host_key.pem:/concourse/tsa_host_key.pem  # Mount TSA host key into the container
+
+  concourse-worker:
+    image: concourse/concourse:arm64  # ARM64 image
+    container_name: concourse-worker
+    restart: always
+    platform: linux/arm64
+    command: worker
+    depends_on:
+      - concourse-web
+    environment:
+      CONCOURSE_TSA_HOST: concourse-web:2222
+      CONCOURSE_TSA_WORKER_PRIVATE_KEY: /concourse/tsa_worker_private_key.pem
+    volumes:
+      - ./tsa_worker_private_key.pem:/concourse/tsa_worker_private_key.pem  # Mount TSA worker private key
